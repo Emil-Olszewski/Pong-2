@@ -23,6 +23,9 @@ namespace Pong_SFML.Game.Entities
             foreach (Entity wall in Entities.Walls)
                 EntitiesList.Add(wall);
 
+            foreach (Entity goal in Entities.Goals)
+                EntitiesList.Add(goal);
+
             foreach (Entity en in MovableEntities)
                 EntitiesList.Add(en);
 

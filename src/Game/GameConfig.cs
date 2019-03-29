@@ -18,5 +18,12 @@ namespace Pong_SFML.Game
         public static readonly float BallRadius = 10;
         public static readonly Vector2f BallSpawnPos = new Vector2f(WindowConfig.Width / 2 - BallRadius / 2, WindowConfig.Height / 2 - BallRadius / 2);
 
+        //Interface
+        public static readonly uint FontSize = 72;
+        public static readonly Vector2f PlayerOneScorePosition = new Vector2f(350, 30);
+        public static readonly Vector2f PlayerTwoScorePosition = new Vector2f(WindowConfig.Width-350-FontSize, 30);
+
+        //Resources
+        public static readonly string FontPath = "7Squared.ttf";
     }
 }

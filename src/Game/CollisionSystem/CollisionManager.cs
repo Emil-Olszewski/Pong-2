@@ -29,7 +29,8 @@ namespace Pong_SFML.Game.CollisionSystem
                     if (CollisionDetector.WillBeColliding(mov, ent))
                     {
                         TeleportToCollidingObjectAndSetVelocityTo0(mov, ent);
-                        ent.wasHit = true;
+                        ent.WasHit();
+                        mov.WasHit();
                     }
                         
 

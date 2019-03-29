@@ -13,7 +13,7 @@ namespace Pong_SFML.Game.Entities
         public int ID { get; set; }
         public abstract bool IsCollidable { get; protected set; }
         public abstract Shape Body { get; protected set; }
-        public bool wasHit { get; set; }
+        public abstract void WasHit();
 
         public virtual FloatRect GetFloatRect() => Body.GetGlobalBounds();
         public abstract void Update();

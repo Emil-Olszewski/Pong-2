@@ -14,7 +14,8 @@ namespace Pong_SFML.Configs
                 Keyboard.Key.W,     // W            player 1 move up
                 Keyboard.Key.S,     // S            player 1 move down
                 Keyboard.Key.Up,    // Up Arrow     player 2 move up
-                Keyboard.Key.Down   // Down arrow   player 2 move down
+                Keyboard.Key.Down,  // Down arrow   player 2 move down
+                Keyboard.Key.R
             };
         }
     }

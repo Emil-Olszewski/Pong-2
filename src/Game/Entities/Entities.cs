@@ -13,6 +13,7 @@ namespace Pong_SFML.Game.Entities
         public static Player Player2;
         public static Ball Ball;
         public static List<Wall> Walls;
+        public static List<Goal> Goals;
 
         static Entities()
         {
@@ -34,9 +35,12 @@ namespace Pong_SFML.Game.Entities
             {
                 new Wall(new Vector2f(1004, 10), new Vector2f(10, 10), Color.White),
                 new Wall(new Vector2f(1004, 10), new Vector2f(10, 556), Color.White),
-                new Wall(new Vector2f(10, 556), new Vector2f(10, 10), Color.White),
-                new Wall(new Vector2f(10, 556), new Vector2f(1004, 10), Color.White),
-                new Wall(new Vector2f(10, 250), new Vector2f(502, 10), Color.White),
+            };
+
+            Goals = new List<Goal>
+            {
+                new Goal(new Vector2f(10, 556), new Vector2f(10, 10), Color.White),
+                new Goal(new Vector2f(10, 556), new Vector2f(1004, 10), Color.White),
             };
 
         }

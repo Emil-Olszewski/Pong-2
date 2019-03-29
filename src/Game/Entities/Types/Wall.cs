@@ -25,15 +25,14 @@ namespace Pong_SFML.Game.Entities.Types
 
         public override void Update()
         {
-            if(wasHit)
-            {
-                Random rand = new Random();
-                Color randomColor = new Color((byte)rand.Next(0, 255), (byte)rand.Next(0, 255), (byte)rand.Next(0, 255), 255);
-                ColorChanger.CountActualColorDifference(Body.FillColor, randomColor);
-                wasHit = false;
-            }
-
             Body.FillColor = ColorChanger.Get(Body.FillColor);
+        }
+
+        public override void WasHit()
+        {
+            Random rand = new Random();
+            Color randomColor = new Color((byte)rand.Next(0, 255), (byte)rand.Next(0, 255), (byte)rand.Next(0, 255), 255);
+            ColorChanger.CountActualColorDifference(Body.FillColor, randomColor);
         }
     }
 }
