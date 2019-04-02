@@ -19,7 +19,7 @@ namespace Pong_SFML.Game.Entities.Types
             {
                 Position = pos,
                 FillColor = Color.Magenta,
-                Size = GameConfig.PlayerSize     
+                Size = GameConfig.PLAYER_SIZE     
             };
 
             Velocity = new Vector2f();
@@ -43,21 +43,21 @@ namespace Pong_SFML.Game.Entities.Types
             switch (dir)
             {
                 case GameController.Direction.UP:
-                    SetVelocity(new Vector2f(Velocity.X, Velocity.Y - GameConfig.PlayerAcceleration));
+                    SetVelocity(new Vector2f(Velocity.X, Velocity.Y - GameConfig.PLAYER_ACCELERATION));
                     break;
 
                 case GameController.Direction.DOWN:
-                    SetVelocity(new Vector2f(Velocity.X, Velocity.Y + GameConfig.PlayerAcceleration));
+                    SetVelocity(new Vector2f(Velocity.X, Velocity.Y + GameConfig.PLAYER_ACCELERATION));
                     break;
             }
         }
 
         public void SetVelocity(Vector2f value)
         {           
-            if (value.Y > GameConfig.PlayerMaxSpeed)
-                Velocity = new Vector2f(Velocity.X, GameConfig.PlayerMaxSpeed);
-            else if (value.Y < -GameConfig.PlayerMaxSpeed)
-                Velocity = new Vector2f(Velocity.X, -GameConfig.PlayerMaxSpeed);
+            if (value.Y > GameConfig.PLAYER_MAX_SPEED)
+                Velocity = new Vector2f(Velocity.X, GameConfig.PLAYER_MAX_SPEED);
+            else if (value.Y < -GameConfig.PLAYER_MAX_SPEED)
+                Velocity = new Vector2f(Velocity.X, -GameConfig.PLAYER_MAX_SPEED);
             else Velocity = value;
         }
 
@@ -73,8 +73,8 @@ namespace Pong_SFML.Game.Entities.Types
         {
             if(isMoving == false)
             {
-                Velocity = new Vector2f(Math.Abs(Velocity.X) > GameConfig.ColorChangerMultiplier ? Velocity.X * GameConfig.PlayerBrakingFactor : 0, Velocity.Y);
-                Velocity = new Vector2f(Velocity.X, Math.Abs(Velocity.Y) > GameConfig.ColorChangerMultiplier ? Velocity.Y * GameConfig.PlayerBrakingFactor : 0);
+                Velocity = new Vector2f(Math.Abs(Velocity.X) > GameConfig.COLOR_CHANGER_MULTIPLIER? Velocity.X * GameConfig.PLAYER_BRAKING_FACTOR : 0, Velocity.Y);
+                Velocity = new Vector2f(Velocity.X, Math.Abs(Velocity.Y) > GameConfig.COLOR_CHANGER_MULTIPLIER? Velocity.Y * GameConfig.PLAYER_BRAKING_FACTOR : 0);
             }
         }
 

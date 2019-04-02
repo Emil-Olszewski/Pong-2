@@ -9,65 +9,65 @@ namespace Pong_SFML.Game.Systems
 {
     public class GameInterface : Transformable, Drawable
     {
-        private Font Font;
-        private List<Text> PlayersScores;
-        public Text Ghost { get; private set; }
-        private int difference;
+        private Text _ghost;
+        private Font _font;
+        private List<Text> _playersScores;
+        private int _difference;
 
         public GameInterface()
         {
-            Font = new Font(GameConfig.FontPath);
-            PlayersScores = new List<Text>()
+            _font = new Font(GameConfig.FONT_PATH);
+            _playersScores = new List<Text>()
             {
-                new Text("0", Font, GameConfig.FontSize)
+                new Text("0", _font, GameConfig.FONT_SIZE)
                 {
-                    Position = GameConfig.PlayerOneScorePosition,
+                    Position = GameConfig.P_ONE_SCORE_POS,
                     FillColor = Color.White
                 },
 
-                new Text("0", Font, GameConfig.FontSize)
+                new Text("0", _font, GameConfig.FONT_SIZE)
                 {
-                    Position = GameConfig.PlayerTwoScorePosition,
+                    Position = GameConfig.P_TWO_SCORE_POS,
                     FillColor = Color.White
                 }
         };
           
-            Ghost = new Text();
+            _ghost = new Text();
         }
 
         public void Update()
         {
-            foreach(Text score in PlayersScores)
-                if(score.CharacterSize != GameConfig.FontSize)
+            foreach(Text score in _playersScores)
+                if(score.CharacterSize != GameConfig.FONT_SIZE)
                 {
                     score.CharacterSize--;
-                    if(Ghost.FillColor.A > 20)
-                        Ghost.FillColor = new Color(Ghost.FillColor.R, Ghost.FillColor.G, Ghost.FillColor.B, (byte)(Ghost.FillColor.A - difference));
+                    if(_ghost.FillColor.A > 20)
+                        _ghost.FillColor = new Color(_ghost.FillColor.R, _ghost.FillColor.G, _ghost.FillColor.B, (byte)(_ghost.FillColor.A - _difference));
                     else
-                        Ghost.FillColor = new Color(Ghost.FillColor.R, Ghost.FillColor.G, Ghost.FillColor.B, 0);
+                        _ghost.FillColor = new Color(_ghost.FillColor.R, _ghost.FillColor.G, _ghost.FillColor.B, 0);
                 }
         }
 
         public void UpdateScore(int playerNumber, int score)
         {
-            if(PlayersScores[playerNumber].DisplayedString != score.ToString())
+            if(_playersScores[playerNumber].DisplayedString != score.ToString())
             {
-                PlayersScores[playerNumber].CharacterSize = 96;
-                PlayersScores[playerNumber].DisplayedString = score.ToString();
-                Ghost = new Text(score.ToString(), Font, PlayersScores[playerNumber].CharacterSize)
+                _playersScores[playerNumber].CharacterSize = 96;
+                _playersScores[playerNumber].DisplayedString = score.ToString();
+                _ghost = new Text(score.ToString(), _font, _playersScores[playerNumber].CharacterSize)
                 {
-                    Position = PlayersScores[playerNumber].Position,
+                    Position = _playersScores[playerNumber].Position,
                     FillColor = new Color(157, 158, 160, 255)
                 };
 
-                difference = (int)(255 / (96 - GameConfig.FontSize) * 1.5);
+                _difference = (int)(255 / (96 - GameConfig.FONT_SIZE) * 1.5);
             }
         }
 
         public void Draw(RenderTarget target, RenderStates states)
         {
-            target.Draw(Ghost);
-            foreach (Text score in PlayersScores)
+            target.Draw(_ghost);
+            foreach (Text score in _playersScores)
                 target.Draw(score);
         }
     }

@@ -14,8 +14,8 @@ namespace Pong_SFML.Game.Entities.Types
         {
             Body = new CircleShape()
             {
-                Position = GameConfig.BallSpawnPos,
-                Radius = GameConfig.BallRadius,
+                Position = GameConfig.BALL_SPAWN_POS,
+                Radius = GameConfig.BALL_RADIUS,
                 FillColor = Color.White
             };
 

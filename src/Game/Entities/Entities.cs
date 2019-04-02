@@ -19,14 +19,14 @@ namespace Pong_SFML.Game.Entities
         {
             Player1 = new Player(new Vector2f
             {
-                X = GameConfig.XFromEdgeSpawnForPlayer,
-                Y = GameConfig.YSpawnForPlayer - GameConfig.PlayerSize.Y/2
+                X = GameConfig.PLAYER_FROM_X_EDGE_SPAWN,
+                Y = GameConfig.PLAYER_Y_SPAWN - GameConfig.PLAYER_SIZE.Y/2
             });
 
             Player2 = new Player(new Vector2f
             {
-                X = WindowConfig.Width - GameConfig.XFromEdgeSpawnForPlayer - GameConfig.PlayerSize.X,
-                Y = GameConfig.YSpawnForPlayer - GameConfig.PlayerSize.Y / 2
+                X = WindowConfig.Width - GameConfig.PLAYER_FROM_X_EDGE_SPAWN - GameConfig.PLAYER_SIZE.X,
+                Y = GameConfig.PLAYER_Y_SPAWN - GameConfig.PLAYER_SIZE.Y / 2
             });
 
             Ball = new Ball();

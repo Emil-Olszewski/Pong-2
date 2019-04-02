@@ -32,7 +32,7 @@ namespace Pong_SFML
             while (Win.IsOpen)
             {
                 Win.DispatchEvents();
-                Win.Clear(Color.Black);
+                Win.Clear(GameCtrl.BackgroundColor);
                 GameCtrl.Update(Win, keysPressed);
 
                 foreach (SFML.Window.Keyboard.Key key in keysPressed)

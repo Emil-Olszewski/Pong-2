@@ -1,30 +1,40 @@
 ﻿using System.Collections.Generic;
 using SFML.Graphics;
-using SFML.System;
-using Pong_SFML.Game;
 using Pong_SFML.Game.Entities;
 using Pong_SFML.Game.CollisionSystem;
-using System;
 using Pong_SFML.Game.Systems;
-using Pong_SFML.Game.AudioManagament;
+using Pong_SFML.Game.AudioSystem;
+
 namespace Pong_SFML
 {
     public class GameController
     {
         public enum Direction { LEFT, RIGHT, UP, DOWN, NONE };
+        public Color BackgroundColor = Color.Black;
         GameInterface GameInterface = new GameInterface();
 
         public void Run()
         {
-            Audio.Play();
+            AudioController.InitBass("test.mp3");
+            AudioController.Play();
         }
 
         public void Update(RenderWindow Win, List<SFML.Window.Keyboard.Key> keysPressed)
         {
+            AudioController.Update();
+            Win.Draw(AudioController.Spectrum);
+
             CollisionManager.Update();
             EntitiesManager.Update();
             EntitiesManager.Draw(Win);
             UpdateInterface(Win);
+            UpdateBackground();
+        }
+
+        private void UpdateBackground()
+        {
+            BackgroundColor = new Color((byte)(AudioController.Spectrum.Color.R / 10), 
+                (byte)(AudioController.Spectrum.Color.R / 10), (byte)(AudioController.Spectrum.Color.R / 10));
         }
 
         private void UpdateInterface(RenderWindow Win)
@@ -33,7 +43,6 @@ namespace Pong_SFML
             GameInterface.UpdateScore(1, Entities.Goals[0].Score);
             GameInterface.Update();
             Win.Draw(GameInterface);
-            Audio.Update();
         }
 
         public void ReactTo(SFML.Window.Keyboard.Key key)

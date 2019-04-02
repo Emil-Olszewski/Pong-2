@@ -9,13 +9,13 @@ namespace Pong_SFML.Game.Systems
 {
     class ColorChanger
     {
-        public Color TargetColor;
-        private int[] actualColorDifference = new int[4];
+        public Color TargetColor { get; set; }
+        private int[] _actualColorDifference = new int[4];
 
         public void CountActualColorDifference(Color actualColor, Color targetColor)
         {
             TargetColor = targetColor;
-            actualColorDifference = new int[4]
+            _actualColorDifference = new int[4]
             {
                 targetColor.R - actualColor.R,
                 targetColor.G - actualColor.G,
@@ -42,8 +42,8 @@ namespace Pong_SFML.Game.Systems
         private byte GetModifiedValue(int value, int targetedValue, int number)
         {
             if (value != targetedValue)
-                return (byte)(Math.Abs(targetedValue - value) > 255 * GameConfig.ColorChangerMultiplier ?
-                    (value + actualColorDifference[number] * GameConfig.ColorChangerMultiplier) : targetedValue);
+                return (byte)(Math.Abs(targetedValue - value) > 255 * GameConfig.COLOR_CHANGER_MULTIPLIER?
+                    (value + _actualColorDifference[number] * GameConfig.COLOR_CHANGER_MULTIPLIER) : targetedValue);
             else
                 return (byte)targetedValue;
         }
