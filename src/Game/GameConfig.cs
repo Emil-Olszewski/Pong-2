@@ -31,6 +31,6 @@ namespace Pong_SFML.Game
         public static readonly int SPECTRUM_REFRESH = 25;
         public static readonly float SPECTRUM_BAR_WIDTH = 8;
         public static readonly float SPECTRUM_BAR_SPACE_BETWEEN = 2.24f;
-        public static readonly int SPECTRUM_COLOR_BAR = 15;
+        public static readonly int SPECTRUM_COLOR_BARS = 15;
     }
 }

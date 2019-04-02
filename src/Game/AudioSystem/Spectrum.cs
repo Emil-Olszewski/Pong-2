@@ -39,10 +39,11 @@ namespace Pong_SFML.Game.AudioSystem
         {
             for(int i = 0; i < _rectangles.Count(); i++)
                 if(i < bytes.Count())
+                {
                     _rectangles[i].Size = new Vector2f(_rectangles[i].Size.X, bytes[i]);
-
-            if (bytes.Count() > GameConfig.SPECTRUM_COLOR_BAR && bytes[GameConfig.SPECTRUM_COLOR_BAR] == byte.MaxValue)
-                ChangeColor();
+                    if (i < GameConfig.SPECTRUM_COLOR_BARS && bytes[i] == byte.MaxValue)
+                        ChangeColor();
+                }
 
             bytes.Clear();
         }
