@@ -20,7 +20,7 @@ namespace Pong_SFML.Game.AudioSystem
             {
                 _rectangles.Add(new RectangleShape()
                 {
-                    Size = new Vector2f(GameConfig.SPECTRUM_BAR_WIDTH, 110),
+                    Size = new Vector2f(GameConfig.SPECTRUM_BAR_WIDTH, 0),
                     FillColor = new Color(90, 150, 140, 100),
                     Position = new Vector2f(GameConfig.SPECTRUM_BAR_WIDTH * i + GameConfig.SPECTRUM_BAR_SPACE_BETWEEN * i, 0)
                 });

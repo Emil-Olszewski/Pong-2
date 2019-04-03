@@ -2,8 +2,8 @@
 using SFML.Graphics;
 using Pong_SFML.Game.Entities;
 using Pong_SFML.Game.CollisionSystem;
-using Pong_SFML.Game.Systems;
 using Pong_SFML.Game.AudioSystem;
+using Pong_SFML.Game.Interface;
 
 namespace Pong_SFML
 {
@@ -11,11 +11,10 @@ namespace Pong_SFML
     {
         public enum Direction { LEFT, RIGHT, UP, DOWN, NONE };
         public Color BackgroundColor = Color.Black;
-        GameInterface GameInterface = new GameInterface();
 
         public void Run()
         {
-            AudioController.InitBass("test.mp3");
+            AudioController.InitBass("test2.mp3");
             AudioController.Play();
         }
 
@@ -27,22 +26,31 @@ namespace Pong_SFML
             CollisionManager.Update();
             EntitiesManager.Update();
             EntitiesManager.Draw(Win);
-            UpdateInterface(Win);
+
+            UpdateInterface();
+            InterfaceManager.Draw(Win);
+
             UpdateBackground();
         }
 
-        private void UpdateBackground()
-        {
+        private void UpdateBackground() =>
             BackgroundColor = new Color((byte)(AudioController.Spectrum.Color.R / 10), 
-                (byte)(AudioController.Spectrum.Color.R / 10), (byte)(AudioController.Spectrum.Color.R / 10));
-        }
+                (byte)(AudioController.Spectrum.Color.G / 10), (byte)(AudioController.Spectrum.Color.B / 10));
 
-        private void UpdateInterface(RenderWindow Win)
+        private void UpdateInterface()
         {
-            GameInterface.UpdateScore(0, Entities.Goals[1].Score);
-            GameInterface.UpdateScore(1, Entities.Goals[0].Score);
-            GameInterface.Update();
-            Win.Draw(GameInterface);
+            InterfaceManager.SetScores(new List<int>()
+            {
+                Entities.Goals[1].Score, Entities.Goals[0].Score
+            });
+
+            InterfaceManager.SetEnergyPoints(new List<int>()
+            {
+                 Entities.Player1.EnergyPoints,  Entities.Player2.EnergyPoints
+            });
+
+            Entities.Player1.UpdateScore(Entities.Goals[1].Score);
+            Entities.Player2.UpdateScore(Entities.Goals[0].Score);
         }
 
         public void ReactTo(SFML.Window.Keyboard.Key key)

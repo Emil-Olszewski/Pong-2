@@ -9,7 +9,10 @@ namespace Pong_SFML.Game.Entities.Types
     {
         public override bool IsCollidable { get; protected set; }
         public override Shape Body { get; protected set; }
-        private bool isMoving;
+        private int _previousPoints;
+        public int Points { get; set; }
+        public int EnergyPoints { get; private set; }
+        private bool _isMoving;
 
         ColorChanger ColorChanger = new ColorChanger();
 
@@ -24,7 +27,6 @@ namespace Pong_SFML.Game.Entities.Types
 
             Velocity = new Vector2f();
             PreviousVelocity = new Vector2f();
-            BounceFactor = 0f;
             IsCollidable = true;
             SetID();  
         }
@@ -34,12 +36,12 @@ namespace Pong_SFML.Game.Entities.Types
             Move();
             IfBodyIsOutsideMapBringItBack();
             Brake();
-            isMoving = false;
+            _isMoving = false;
         }
 
         public void AddVelocity(GameController.Direction dir)
         {
-            isMoving = true;
+            _isMoving = true;
             switch (dir)
             {
                 case GameController.Direction.UP:
@@ -71,7 +73,7 @@ namespace Pong_SFML.Game.Entities.Types
 
         private void Brake()
         {
-            if(isMoving == false)
+            if(_isMoving == false)
             {
                 Velocity = new Vector2f(Math.Abs(Velocity.X) > GameConfig.COLOR_CHANGER_MULTIPLIER? Velocity.X * GameConfig.PLAYER_BRAKING_FACTOR : 0, Velocity.Y);
                 Velocity = new Vector2f(Velocity.X, Math.Abs(Velocity.Y) > GameConfig.COLOR_CHANGER_MULTIPLIER? Velocity.Y * GameConfig.PLAYER_BRAKING_FACTOR : 0);
@@ -89,6 +91,21 @@ namespace Pong_SFML.Game.Entities.Types
             Random rand = new Random();
             Color randomColor = new Color((byte)rand.Next(0, 255), (byte)rand.Next(0, 255), (byte)rand.Next(0, 255), 255);
             ColorChanger.CountActualColorDifference(Body.FillColor, randomColor);
+        }
+
+        public void UpdateScore(int score)
+        {
+            _previousPoints = Points;
+            Points = score;
+            if (Points - _previousPoints > 0)
+                AddEnergyPoint();
+        }
+
+        private void AddEnergyPoint()
+        {
+            EnergyPoints++;
+            if (EnergyPoints > GameConfig.PLAYER_MAX_ENERGY_POINTS)
+                EnergyPoints = GameConfig.PLAYER_MAX_ENERGY_POINTS;
         }
     }
 }
