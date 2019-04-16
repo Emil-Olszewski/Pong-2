@@ -28,7 +28,7 @@ namespace Pong_SFML.Game.Interface
                     });
 
                     if (i == 1)
-                        _playersEnergyRectangles[i][j].Position = new Vector2f(Configs.WindowConfig.Width - GameConfig.ENERGY_RECTS_FROM_X_EDGE - j * (GameConfig.ENERGY_RECT_SPACE_BETWEEN + GameConfig.ENERGY_RECT_SIZE),
+                        _playersEnergyRectangles[i][j].Position = new Vector2f(GameConfig.W_WIDTH - GameConfig.ENERGY_RECTS_FROM_X_EDGE - j * (GameConfig.ENERGY_RECT_SPACE_BETWEEN + GameConfig.ENERGY_RECT_SIZE),
                             GameConfig.P_ONE_SCORE_POS.Y + GameConfig.FONT_SIZE / 2 - GameConfig.ENERGY_RECT_SIZE / 2);
                 }
             }        

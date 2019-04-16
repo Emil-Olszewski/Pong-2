@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SFML.Graphics;
+using SFML.System;
 
 namespace Pong_SFML.Game.Interface
 {
@@ -67,6 +68,15 @@ namespace Pong_SFML.Game.Interface
                 };
 
                 _difference = (int)(255 / (96 - GameConfig.FONT_SIZE) * 1.5);
+            }
+        }
+
+        public void EndShow()
+        {
+            foreach(Text score in _playersScores)
+            {
+                score.CharacterSize = 96;
+                score.Position = new Vector2f(score.Position.X, GameConfig.W_HEIGHT / 2 - score.GetGlobalBounds().Height / 2);
             }
         }
 

@@ -14,6 +14,7 @@ namespace Pong_SFML.Game.Entities.Types
         public override void WasHit()
         {
             base.WasHit();
+            AudioSystem.AudioController.PlaySound("SCORE");
             Score++;
         }
     }

@@ -7,26 +7,39 @@ namespace Pong_SFML.Game.AudioSystem
     public static class AudioController
     {
         public static Spectrum Spectrum;
+        
         static Timer _timer;
-        static int _stream;
+        static int _music;
+        static int _channel;
 
-        public static void InitBass(string path)
+        static AudioController()
         {
-            if (Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero))
-            {
-                _stream = Bass.BASS_StreamCreateFile(path, 0L, 0L, BASSFlag.BASS_DEFAULT);
-                if (_stream != 0)
-                    SpectrumCreator.Stream = _stream;
-                else
-                    throw new Exception(Bass.BASS_ErrorGetCode().ToString());
-            }
-
+            Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
             Spectrum = new Spectrum(GameConfig.SPECTRUM_LINES);
         }
 
-        public static void Play()
+        public static void LoadMusic(string path)
         {
-            Bass.BASS_ChannelPlay(_stream, false);
+            _music = Bass.BASS_StreamCreateFile(path, 0L, 0L, BASSFlag.BASS_DEFAULT);
+            if (_music != 0)
+                SpectrumCreator.Stream = _music;
+            else
+                throw new Exception(Bass.BASS_ErrorGetCode().ToString());
+        }
+
+        public static void PlaySound(string name)
+        {
+            if(Sounds.GetSoundNamed(name) != 0)
+            {
+                _channel = Bass.BASS_SampleGetChannel(Sounds.GetSoundNamed(name), false);  
+                Bass.BASS_ChannelPlay(_channel, true);
+            }
+        }
+
+        public static void StartPlayingMusic()
+        {
+            Bass.BASS_ChannelPlay(_music, false);
+            //Bass.BASS_ChannelSetAttribute(_music, BASSAttribute.BASS_ATTRIB_VOL, 0);
             InitTimer();
         }
 
@@ -35,6 +48,9 @@ namespace Pong_SFML.Game.AudioSystem
             if (_timer.Enabled)
                 Spectrum.Update(SpectrumCreator.Bytes);
         }
+
+        public static double GetRemainedMusicLenght()
+            => Bass.BASS_ChannelBytes2Seconds(_music, Bass.BASS_ChannelGetLength(_music) - Bass.BASS_ChannelGetPosition(_music));
 
         static void InitTimer()
         {

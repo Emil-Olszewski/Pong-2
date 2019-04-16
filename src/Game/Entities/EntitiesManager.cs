@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Pong_SFML.Game.Entities;
 using Pong_SFML.Game.CollisionSystem;
 using SFML.Graphics;
 
@@ -40,8 +39,9 @@ namespace Pong_SFML.Game.Entities
 
         public static void Update()
         {
+            CollisionManager.Update();
             foreach (Entity entity in EntitiesList)
-                entity.Update();
+                entity.Update();    
         }
 
         public static void Draw(RenderWindow win)

@@ -10,7 +10,7 @@ namespace Pong_SFML.Game.Systems
     class ColorChanger
     {
         public Color TargetColor { get; set; }
-        private int[] _actualColorDifference = new int[4];
+        public int[] _actualColorDifference = new int[4];
 
         public void CountActualColorDifference(Color actualColor, Color targetColor)
         {
@@ -21,7 +21,6 @@ namespace Pong_SFML.Game.Systems
                 targetColor.G - actualColor.G,
                 targetColor.B - actualColor.B,
                 targetColor.A - actualColor.A,
-
             };
         }
 

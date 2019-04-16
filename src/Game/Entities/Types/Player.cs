@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using SFML.Graphics;
 using SFML.System;
 using Pong_SFML.Game.Systems;
+using System.Timers;
 
 namespace Pong_SFML.Game.Entities.Types
 {
@@ -27,14 +29,14 @@ namespace Pong_SFML.Game.Entities.Types
 
             Velocity = new Vector2f();
             PreviousVelocity = new Vector2f();
+            ActiveBonuses = new List<Bonus.Type>();
             IsCollidable = true;
-            SetID();  
+            SetID();
         }
 
         public override void UpdatePosition()
         {
             Move();
-            IfBodyIsOutsideMapBringItBack();
             Brake();
             _isMoving = false;
         }
@@ -61,14 +63,6 @@ namespace Pong_SFML.Game.Entities.Types
             else if (value.Y < -GameConfig.PLAYER_MAX_SPEED)
                 Velocity = new Vector2f(Velocity.X, -GameConfig.PLAYER_MAX_SPEED);
             else Velocity = value;
-        }
-
-        public void IfBodyIsOutsideMapBringItBack()
-        {
-            if (Body.Position.Y + Body.GetGlobalBounds().Height < 0)
-                Body.Position = new Vector2f(Body.Position.X, 576);
-            if (Body.Position.Y > 576)
-                Body.Position = new Vector2f(Body.Position.X, 0 - Body.GetGlobalBounds().Height);
         }
 
         private void Brake()
@@ -107,5 +101,17 @@ namespace Pong_SFML.Game.Entities.Types
             if (EnergyPoints > GameConfig.PLAYER_MAX_ENERGY_POINTS)
                 EnergyPoints = GameConfig.PLAYER_MAX_ENERGY_POINTS;
         }
+
+        public void AddBonus(Bonus.Type bonus)
+        {
+            if(EnergyPoints >= Bonus.Price(bonus))
+            {
+                AudioSystem.AudioController.PlaySound("POWER");
+                ActiveBonuses.Add(bonus);
+                EnergyPoints -= Bonus.Price(bonus);
+            }
+        }
+
+        public override void ResetPosition() => Body.Position = new Vector2f(Body.Position.X, GameConfig.PLAYER_Y_SPAWN);
     }
 }

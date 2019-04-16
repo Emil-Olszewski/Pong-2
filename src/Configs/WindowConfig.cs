@@ -2,17 +2,9 @@
 {
     public static class WindowConfig
     {
-        public static uint Width { get; private set; }
-        public static uint Height { get; private set; }
-        public static string Title { get; private set; }
-        public static uint Framerate { get; private set; }
-
-        static WindowConfig()
-        {
-            Width = 1024;
-            Height = 576;
-            Title = "Pong SFML";
-            Framerate = 144;
-        }
+        public static readonly uint WIDTH = 1280;
+        public static readonly uint HEIGHT = 720;
+        public static readonly uint FRAMERATE = 144;
+        public static readonly string TITLE = "PONG 2";
     }
 }

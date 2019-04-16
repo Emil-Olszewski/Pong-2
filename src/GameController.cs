@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SFML.Graphics;
 using Pong_SFML.Game.Entities;
-using Pong_SFML.Game.CollisionSystem;
 using Pong_SFML.Game.AudioSystem;
 using Pong_SFML.Game.Interface;
+using Pong_SFML.Configs;
+using Pong_SFML.Game;
 
 namespace Pong_SFML
 {
@@ -12,32 +14,67 @@ namespace Pong_SFML
         public enum Direction { LEFT, RIGHT, UP, DOWN, NONE };
         public Color BackgroundColor = Color.Black;
 
-        public void Run()
+        private Counter _startCounter;
+        private Counter _gameCounter;
+        
+        public void Run(string musicName)
         {
-            AudioController.InitBass("test2.mp3");
-            AudioController.Play();
+            SetAudioController(musicName);
+            SetTimers();
+            _startCounter.Start();
         }
 
-        public void Update(RenderWindow Win, List<SFML.Window.Keyboard.Key> keysPressed)
+        private static void SetAudioController(string musicName)
         {
-            AudioController.Update();
+            AudioController.LoadMusic("Resources/music/" + musicName + ".mp3");
+            AudioController.StartPlayingMusic();
+        }
+
+        private void SetTimers()
+        {
+            _startCounter = new Counter(GameConfig.WAITING_DURATION, 69, "GO!");
+            _gameCounter = new Counter(GameConfig.MATCH_DURATION, 54, "STOP!");
+        }
+
+        public void Update(RenderWindow Win)
+        {
             Win.Draw(AudioController.Spectrum);
+            AudioController.Update();
+            RefreshBackground();
 
-            CollisionManager.Update();
-            EntitiesManager.Update();
-            EntitiesManager.Draw(Win);
+            if (_startCounter.Active)
+                Win.Draw(_startCounter);
 
-            UpdateInterface();
-            InterfaceManager.Draw(Win);
+            if(_startCounter.Finished && _gameCounter.Active == false && _gameCounter.Finished == false)
+                _gameCounter.Start();
 
-            UpdateBackground();
+            if(_gameCounter.Active)
+                UpdateSystems();
+
+            if (_gameCounter.Finished)
+                InterfaceManager.EndShow();
+
+            if (_gameCounter.Active || _gameCounter.Finished)
+            {
+                InterfaceManager.Draw(Win);
+                Win.Draw(_gameCounter);
+            }
+
+            EntitiesManager.Draw(Win); 
         }
 
-        private void UpdateBackground() =>
-            BackgroundColor = new Color((byte)(AudioController.Spectrum.Color.R / 10), 
-                (byte)(AudioController.Spectrum.Color.G / 10), (byte)(AudioController.Spectrum.Color.B / 10));
+        private void UpdateSystems()
+        {
+            EntitiesManager.Update();
+            CommunicateWithInterface();
+        }
 
-        private void UpdateInterface()
+        private void RefreshBackground() =>
+            BackgroundColor = new Color((byte)(AudioController.Spectrum.Color.R * GameConfig.BACKGROUND_COLOR_MULTIPLIER), 
+                (byte)(AudioController.Spectrum.Color.G * GameConfig.BACKGROUND_COLOR_MULTIPLIER), 
+                (byte)(AudioController.Spectrum.Color.B * GameConfig.BACKGROUND_COLOR_MULTIPLIER));
+
+        private void CommunicateWithInterface()
         {
             InterfaceManager.SetScores(new List<int>()
             {
@@ -53,30 +90,6 @@ namespace Pong_SFML
             Entities.Player2.UpdateScore(Entities.Goals[0].Score);
         }
 
-        public void ReactTo(SFML.Window.Keyboard.Key key)
-        {
-            switch (key)
-            {
-                case SFML.Window.Keyboard.Key.W:
-                    Entities.Player1.AddVelocity(Direction.UP);
-                    break;
-
-                case SFML.Window.Keyboard.Key.S:
-                    Entities.Player1.AddVelocity(Direction.DOWN);
-                    break;
-
-                case SFML.Window.Keyboard.Key.Up:
-                    Entities.Player2.AddVelocity(Direction.UP);
-                    break;
-
-                case SFML.Window.Keyboard.Key.Down:
-                    Entities.Player2.AddVelocity(Direction.DOWN);
-                    break;
-
-                case SFML.Window.Keyboard.Key.R:
-                    Entities.Ball.UltraBoost = true;
-                    break;
-            }
-        }
+        public void ReactTo(DescrKey key) => KeyReactor.Do(key);
     }
 }
