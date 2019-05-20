@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using SFML.Graphics;
 using SFML.Window;
 using Pong_SFML.Configs;
 
@@ -8,63 +6,44 @@ namespace Pong_SFML
 {
     public static class MainController
     {
-        private static RenderWindow Win;
-        private static GameController GameCtrl = new GameController();
-        
-        private static List<DescrKey> _holdingKeysPressed = new List<DescrKey>();
-        private static List<DescrKey> _pressingKeysPressed = new List<DescrKey>();
+        private enum State { MENU, GAME};
+        private static State _state = State.MENU;
 
         public static void Main(string[] args)
         {
-            Win = new RenderWindow(new VideoMode(WindowConfig.WIDTH, WindowConfig.HEIGHT), WindowConfig.TITLE);
-            Win.SetFramerateLimit(WindowConfig.FRAMERATE);
-
-            Win.KeyPressed += Win_KeyPressed;
-            Win.KeyReleased += Win_KeyReleased;
-            Win.Closed += Window_Closed;
-
-            GameCtrl.Run("nyan");
-
-            while (Win.IsOpen)
+            while (MainWindow.Win.IsOpen)
             {
-                Win.DispatchEvents();
-                Win.Clear(GameCtrl.BackgroundColor);
-           
-                GameCtrl.Update(Win);
+                MainWindow.Win.DispatchEvents();
+                MainWindow.Win.Clear(GameController.BackgroundColor);
 
-                foreach (DescrKey key in _holdingKeysPressed)
-                    GameCtrl.ReactTo(key);
+                if (_state == State.MENU)
+                    MenuController.Update();
+                else
+                {
+                    GameController.Update();
 
-                foreach (DescrKey key in _pressingKeysPressed)
-                    GameCtrl.ReactTo(key);
+                    foreach (DescrKey key in MainWindow._holdingKeysPressed)
+                        GameController.ReactTo(key);
 
-                _pressingKeysPressed.Clear();
+                    foreach (DescrKey key in MainWindow._pressingKeysPressed)
+                        GameController.ReactTo(key);
+                }
 
+                MainWindow._pressingKeysPressed.Clear();
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
-                    Win.Close();
+                    MainWindow.Win.Close();
 
-                Win.Display();
+                MainWindow.Win.Display();
             }
         }
-        
-        private static void Win_KeyPressed(object sender, KeyEventArgs e)
-        {
-            foreach (DescrKey dkey in KeyConfig.HoldingKeys)
-                if (Keyboard.IsKeyPressed(dkey.Key) && !_holdingKeysPressed.Contains(dkey))
-                        _holdingKeysPressed.Add(dkey);
 
-            foreach (DescrKey dkey in KeyConfig.PressingKeys)
-                if (Keyboard.IsKeyPressed(dkey.Key))
-                        _pressingKeysPressed.Add(dkey);
+        public static void RunGame(object sender, EventArgs e)
+        {
+            _state = State.GAME;
+            GameController.Run();
         }
 
-        private static void Win_KeyReleased(object sender, KeyEventArgs e)
-        {
-            for(int i=0; i<_holdingKeysPressed.Count; i++)
-                if (!Keyboard.IsKeyPressed(_holdingKeysPressed[i].Key))
-                    _holdingKeysPressed.Remove(_holdingKeysPressed[i]);
-        }
-
-        private static void Window_Closed(object sender, EventArgs e) => Win.Close();
+        public static void RunMenu()
+            => _state = State.MENU;
     }
 }

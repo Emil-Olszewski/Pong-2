@@ -6,8 +6,8 @@ namespace Pong_SFML.Game.Entities
 {
     public static class EntitiesManager
     {
-        static public List<Entity> EntitiesList;
-        static public List<MovableEntity> MovableEntities;
+        public static List<Entity> EntitiesList;
+        public static List<MovableEntity> MovableEntities;
 
         static EntitiesManager()
         {
@@ -48,6 +48,12 @@ namespace Pong_SFML.Game.Entities
         {
             foreach (Entity entity in EntitiesList)
                 win.Draw(entity);
+        }
+
+        public static void Reset()
+        {
+            foreach (Entity entity in EntitiesList)
+                entity.Reset();
         }
     }
 }

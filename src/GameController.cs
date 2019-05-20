@@ -1,49 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SFML.Graphics;
-using Pong_SFML.Game.Entities;
-using Pong_SFML.Game.AudioSystem;
-using Pong_SFML.Game.Interface;
-using Pong_SFML.Configs;
 using Pong_SFML.Game;
+using Pong_SFML.Game.Entities;
+using Pong_SFML.Game.Interface;
+using Pong_SFML.Game.AudioSystem;
+using Pong_SFML.Game.AudioSystem.Types;
+using Pong_SFML.Configs;
 
 namespace Pong_SFML
 {
-    public class GameController
+    public static class GameController
     {
         public enum Direction { LEFT, RIGHT, UP, DOWN, NONE };
-        public Color BackgroundColor = Color.Black;
+        public static Color BackgroundColor = Color.Black;
+        public static Song Song;
 
-        private Counter _startCounter;
-        private Counter _gameCounter;
-        
-        public void Run(string musicName)
+        private static Counter _startCounter;
+        private static Counter _gameCounter;
+        private static Counter _backToMenuCounter;
+
+        public static void Run()
         {
-            SetAudioController(musicName);
+            EntitiesManager.Reset();
+            InterfaceManager.Reset();
+            BackgroundColor = GameConfig.BACKGROUND_COLOR;
+            SetAudioController();
             SetTimers();
             _startCounter.Start();
         }
 
-        private static void SetAudioController(string musicName)
+        private static void SetAudioController()
         {
-            AudioController.LoadMusic("Resources/music/" + musicName + ".mp3");
-            AudioController.StartPlayingMusic();
+            AudioController.LoadMusic(Song.Path);
+            AudioController.StartMusic();
         }
 
-        private void SetTimers()
+        private static void SetTimers()
         {
             _startCounter = new Counter(GameConfig.WAITING_DURATION, 69, "GO!");
             _gameCounter = new Counter(GameConfig.MATCH_DURATION, 54, "STOP!");
+            _gameCounter.OnFinish += AudioController.StopMusic;
+            _backToMenuCounter = new Counter(GameConfig.SCORE_SHOW_DURATION, 0, "");
+            _backToMenuCounter.OnFinish += MainController.RunMenu;
+
+            _startCounter.Reset();
+            _gameCounter.Reset();
+            _backToMenuCounter.Reset();
         }
 
-        public void Update(RenderWindow Win)
+        public static void Update()
         {
-            Win.Draw(AudioController.Spectrum);
+            MainWindow.Win.Draw(AudioController.Spectrum);
             AudioController.Update();
             RefreshBackground();
 
             if (_startCounter.Active)
-                Win.Draw(_startCounter);
+                MainWindow.Win.Draw(_startCounter);
 
             if(_startCounter.Finished && _gameCounter.Active == false && _gameCounter.Finished == false)
                 _gameCounter.Start();
@@ -52,29 +64,32 @@ namespace Pong_SFML
                 UpdateSystems();
 
             if (_gameCounter.Finished)
+            {
                 InterfaceManager.EndShow();
+                _backToMenuCounter.Start();
+            }
 
             if (_gameCounter.Active || _gameCounter.Finished)
             {
-                InterfaceManager.Draw(Win);
-                Win.Draw(_gameCounter);
+                InterfaceManager.Draw(MainWindow.Win);
+                MainWindow.Win.Draw(_gameCounter);
             }
 
-            EntitiesManager.Draw(Win); 
+            EntitiesManager.Draw(MainWindow.Win); 
         }
 
-        private void UpdateSystems()
+        private static void UpdateSystems()
         {
             EntitiesManager.Update();
             CommunicateWithInterface();
         }
 
-        private void RefreshBackground() =>
+        private static void RefreshBackground() =>
             BackgroundColor = new Color((byte)(AudioController.Spectrum.Color.R * GameConfig.BACKGROUND_COLOR_MULTIPLIER), 
                 (byte)(AudioController.Spectrum.Color.G * GameConfig.BACKGROUND_COLOR_MULTIPLIER), 
                 (byte)(AudioController.Spectrum.Color.B * GameConfig.BACKGROUND_COLOR_MULTIPLIER));
 
-        private void CommunicateWithInterface()
+        private static void CommunicateWithInterface()
         {
             InterfaceManager.SetScores(new List<int>()
             {
@@ -90,6 +105,7 @@ namespace Pong_SFML
             Entities.Player2.UpdateScore(Entities.Goals[0].Score);
         }
 
-        public void ReactTo(DescrKey key) => KeyReactor.Do(key);
+        public static void ReactTo(DescrKey key)
+            => KeyReactor.Do(key);
     }
 }

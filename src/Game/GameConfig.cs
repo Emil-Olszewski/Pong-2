@@ -15,10 +15,13 @@ namespace Pong_SFML.Game
         public static readonly float PLAYER_MAX_SPEED = 6.0f;
         public static readonly float PLAYER_ACCELERATION = 0.7f;
         public static readonly float PLAYER_BRAKING_FACTOR = 0.85f;
-        public static readonly float PLAYER_FROM_X_EDGE_SPAWN = 75;
-        public static readonly float PLAYER_Y_SPAWN = (W_HEIGHT / 2) - (PLAYER_SIZE.Y / 2);
         public static readonly float COLOR_CHANGER_MULTIPLIER= 0.05f;
         public static readonly int PLAYER_MAX_ENERGY_POINTS = 3;
+        public static readonly float PLAYER_FROM_X_EDGE_SPAWN = 75;
+        public static readonly float PLAYER_Y_SPAWN = (W_HEIGHT / 2) - (PLAYER_SIZE.Y / 2);
+        public static readonly Vector2f PLAYER1_POS = new Vector2f(PLAYER_FROM_X_EDGE_SPAWN, PLAYER_Y_SPAWN);
+        public static readonly Vector2f PLAYER2_POS = new Vector2f(W_WIDTH - PLAYER_FROM_X_EDGE_SPAWN - PLAYER_SIZE.X, PLAYER_Y_SPAWN);
+        public static readonly Color PLAYER_COLOR = Color.Yellow;
 
         //Ball
         public static readonly float BALL_RADIUS = 10;
@@ -27,6 +30,9 @@ namespace Pong_SFML.Game
         public static readonly Color BALL_COLOR = Color.White;
         public static readonly Color ULTRABALL_COLOR = Color.Red;
         public static readonly Color GOLDBALL_COLOR = new Color(255, 215, 0);
+
+        //Walls
+        public static readonly Color WALL_COLOR = Color.White;
 
         //Interface
         public static readonly uint FONT_SIZE = 72;
@@ -39,20 +45,19 @@ namespace Pong_SFML.Game
         public static readonly Color ENERGY_RECTS_COLOR = new Color(255, 255, 255);
         public static readonly Color ACTIVE_ENERGY_RECTS_COLOR = new Color(255, 130, 97);
         public static readonly Color INACTIVE_ENERGY_RECTS_COLOR = new Color(60, 60, 60);
-        
-        //Resources
-        public static readonly string FONT_PATH = "7Squared.ttf";
 
         //Audio
-        public static readonly int SPECTRUM_LINES = 128;
+        public static readonly int SPECTRUM_LINES = 150;
         public static readonly int SPECTRUM_REFRESH = 25;
         public static readonly float SPECTRUM_BAR_WIDTH = 8;
         public static readonly float SPECTRUM_BAR_SPACE_BETWEEN = 2.24f;
         public static readonly int SPECTRUM_COLOR_BARS = 15;
 
         //Game
+        public static readonly Color BACKGROUND_COLOR = Color.Black;
         public static readonly float BACKGROUND_COLOR_MULTIPLIER = 0.06f;
-        public static readonly int WAITING_DURATION = 5;
-        public static readonly int MATCH_DURATION = 90;
+        public static readonly int WAITING_DURATION = 6;
+        public static readonly int MATCH_DURATION = 100;
+        public static readonly int SCORE_SHOW_DURATION = 5;
     }
 }

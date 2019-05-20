@@ -12,11 +12,13 @@ namespace Pong_SFML.Game.Entities.Types
         private int _boost;
         private int _goldboost;
         private int _transparent;
-        private List<CircleShape> _trails = new List<CircleShape>();
         private int _trailsLimit = 80;
         private int _drawnTrails = 10;
+        private List<CircleShape> _trails;
 
-        public Ball()
+        public Ball() => Init();
+
+        public override void Init()
         {
             Body = new CircleShape()
             {
@@ -24,21 +26,27 @@ namespace Pong_SFML.Game.Entities.Types
                 FillColor = Color.White
             };
 
+            ActiveBonuses = new List<Bonus.Type>();
+            _trails = new List<CircleShape>();
+            PreviousVelocity = new Vector2f(0, 0);
+
+            Velocity = GetRandomVector(GameConfig.BALL_INIT_SPEED);
             ResetPosition();
+            _trails.Clear();
+            ActiveBonuses.Clear();
+            SetID();
 
             IsCollidable = true;
-            Velocity = GetRandomVector(GameConfig.BALL_INIT_SPEED);
-            PreviousVelocity = new Vector2f();
             BounceFactor = 1.001f;
-            SetID();
-            ActiveBonuses = new List<Bonus.Type>();
         }
 
         private Vector2f GetRandomVector(float speed)
         {
             Random rand = new Random();
-            float X = rand.Next(1, (int)Math.Sqrt(speed));
-            float Y = (float)Math.Sqrt(speed - Math.Pow(X, 2));
+            int xNegative = rand.Next(0, 10) > 4 ? 1 : -1;
+            int yNegative = rand.Next(0, 10) > 4 ? 1 : -1;
+            float X = xNegative * rand.Next(1, (int)Math.Sqrt(speed));
+            float Y = yNegative * (float)Math.Sqrt(speed - Math.Pow(X, 2));
             return new Vector2f(X, Y);
         }
 
@@ -159,15 +167,17 @@ namespace Pong_SFML.Game.Entities.Types
             base.Draw(target, states);
 
             if(_trails.Count > 0)
-            for (int i = _trails.Count - 1, j = 0; j < _drawnTrails; i--, j++)
-            {
-                if (_trails.Count > j)
-                    target.Draw(_trails[i]);
-                else
-                    break;
-            }
+                for (int i = _trails.Count - 1, j = 0; j < _drawnTrails; i--, j++)
+                {
+                    if (_trails.Count > j)
+                        target.Draw(_trails[i]);
+                    else
+                        break;
+                }
         }
 
         public override void ResetPosition() => Body.Position = GameConfig.BALL_SPAWN_POS;
+
+        public override void Reset() => Init();
     }
 }

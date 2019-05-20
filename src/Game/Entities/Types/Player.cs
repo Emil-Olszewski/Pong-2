@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using SFML.Graphics;
 using SFML.System;
 using Pong_SFML.Game.Systems;
-using System.Timers;
 
 namespace Pong_SFML.Game.Entities.Types
 {
@@ -11,24 +10,31 @@ namespace Pong_SFML.Game.Entities.Types
     {
         public override bool IsCollidable { get; protected set; }
         public override Shape Body { get; protected set; }
-        private int _previousPoints;
         public int Points { get; set; }
         public int EnergyPoints { get; private set; }
+        private int _previousPoints;
         private bool _isMoving;
+        private bool _isPlayerOne;
 
         ColorChanger ColorChanger = new ColorChanger();
 
-        public Player(Vector2f pos)
+        public Player(bool isPlayerOne)
         {
-            Body = new RectangleShape(pos)
+            _isPlayerOne = isPlayerOne;
+            Init();
+        }
+
+        public override void Init()
+        {
+            Body = new RectangleShape()
             {
-                Position = pos,
-                FillColor = Color.Magenta,
-                Size = GameConfig.PLAYER_SIZE     
+                FillColor = GameConfig.PLAYER_COLOR,
+                Size = GameConfig.PLAYER_SIZE,
+                Position = _isPlayerOne ? GameConfig.PLAYER1_POS : GameConfig.PLAYER2_POS
             };
 
-            Velocity = new Vector2f();
-            PreviousVelocity = new Vector2f();
+            Velocity = new Vector2f(0,0);
+            PreviousVelocity = new Vector2f(0,0);
             ActiveBonuses = new List<Bonus.Type>();
             IsCollidable = true;
             SetID();
@@ -69,8 +75,10 @@ namespace Pong_SFML.Game.Entities.Types
         {
             if(_isMoving == false)
             {
-                Velocity = new Vector2f(Math.Abs(Velocity.X) > GameConfig.COLOR_CHANGER_MULTIPLIER? Velocity.X * GameConfig.PLAYER_BRAKING_FACTOR : 0, Velocity.Y);
-                Velocity = new Vector2f(Velocity.X, Math.Abs(Velocity.Y) > GameConfig.COLOR_CHANGER_MULTIPLIER? Velocity.Y * GameConfig.PLAYER_BRAKING_FACTOR : 0);
+                Velocity = new Vector2f(Math.Abs(Velocity.X) > GameConfig.COLOR_CHANGER_MULTIPLIER 
+                    ? Velocity.X * GameConfig.PLAYER_BRAKING_FACTOR : 0, Velocity.Y);
+                Velocity = new Vector2f(Velocity.X, Math.Abs(Velocity.Y) > GameConfig.COLOR_CHANGER_MULTIPLIER
+                    ? Velocity.Y * GameConfig.PLAYER_BRAKING_FACTOR : 0);
             }
         }
 
@@ -112,6 +120,7 @@ namespace Pong_SFML.Game.Entities.Types
             }
         }
 
-        public override void ResetPosition() => Body.Position = new Vector2f(Body.Position.X, GameConfig.PLAYER_Y_SPAWN);
+        public override void ResetPosition() 
+            => Body.Position = new Vector2f(Body.Position.X, GameConfig.PLAYER_Y_SPAWN);
     }
 }

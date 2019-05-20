@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Pong_SFML.Configs;
 using SFML.Graphics;
 using SFML.System;
 
@@ -15,7 +16,7 @@ namespace Pong_SFML.Game.Interface
 
         private void InitializeTexts()
         {
-            _font = new Font(GameConfig.FONT_PATH);
+            _font = Fonts.InGameFont;
             _playersScores = new List<Text>()
             {
                 new Text("0", _font, GameConfig.FONT_SIZE)
@@ -32,6 +33,12 @@ namespace Pong_SFML.Game.Interface
         };
 
             _ghost = new Text();
+        }
+
+        public void Reset()
+        {
+            _playersScores[0].Position = GameConfig.P_ONE_SCORE_POS;
+            _playersScores[1].Position = GameConfig.P_TWO_SCORE_POS;
         }
 
         public void Update(List<int> scores)

@@ -34,5 +34,8 @@ namespace Pong_SFML.Game.Entities.Types
             Color randomColor = new Color((byte)rand.Next(0, 255), (byte)rand.Next(0, 255), (byte)rand.Next(0, 255), 255);
             ColorChanger.CountActualColorDifference(Body.FillColor, randomColor);
         }
+
+        public override void Reset()
+            => Body.FillColor = GameConfig.WALL_COLOR;
     }
 }

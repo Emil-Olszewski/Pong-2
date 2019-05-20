@@ -1,4 +1,5 @@
 ﻿using System.Timers;
+using Pong_SFML.Configs;
 using SFML.Graphics;
 using SFML.System;
 
@@ -11,13 +12,16 @@ namespace Pong_SFML.Game.Interface
         int _seconds;
         Text _text;
         Timer _timer;
-        string _message;
+        readonly string _message;
+
+        public delegate void FinishedFunction();
+        public FinishedFunction OnFinish;
 
         public Counter(int seconds, int size, string finishMessage)
         {
             _seconds = seconds;
             _message = finishMessage;
-            _text = new Text(seconds.ToString(), new Font(GameConfig.FONT_PATH))
+            _text = new Text(seconds.ToString(), Fonts.InGameFont)
             {
                 FillColor = Color.White,
                 CharacterSize = (uint)size
@@ -30,7 +34,8 @@ namespace Pong_SFML.Game.Interface
             _timer.AutoReset = true;
         }
 
-        private float GetDisplayMidPos() => GameConfig.W_WIDTH / 2 - _text.GetLocalBounds().Width / 2;
+        private float GetDisplayMidPos()
+            => GameConfig.W_WIDTH / 2 - _text.GetLocalBounds().Width / 2;
 
         public void Start()
         {
@@ -57,6 +62,15 @@ namespace Pong_SFML.Game.Interface
             _timer.Enabled = false;
             Active = false;
             Finished = true;
+
+            OnFinish?.Invoke();
+        }
+
+        public void Reset()
+        {
+            _timer.Enabled = false;
+            Active = false;
+            Finished = false;
         }
 
         public void Draw(RenderTarget target, RenderStates states) => target.Draw(_text);

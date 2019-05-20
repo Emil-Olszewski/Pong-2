@@ -1,10 +1,10 @@
 ﻿namespace Pong_SFML.Game.Entities
 {
-    static public class Bonus
+    public static class Bonus
     {
         public enum Type { BOOST, TRANSPARENT };
 
-        static public int Price(Type type)
+        public static int Price(Type type)
         {
             switch(type)
             {

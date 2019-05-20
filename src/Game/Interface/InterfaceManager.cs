@@ -11,7 +11,6 @@ namespace Pong_SFML.Game.Interface
         public static void SetScores(List<int> scores) => _scores.Update(scores);
         public static void SetEnergyPoints(List<int> points) => _energyRectangles.Update(points);
 
-
         public static void EndShow()
         {
             _endShow = true;
@@ -23,6 +22,12 @@ namespace Pong_SFML.Game.Interface
             if(_endShow == false)
                 win.Draw(_energyRectangles);
             win.Draw(_scores);
+        }
+
+        public static void Reset()
+        {
+            _scores.Reset();
+            _endShow = false;
         }
     }
 }

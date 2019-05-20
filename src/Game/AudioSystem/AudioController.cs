@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Timers;
+using Pong_SFML.Game.Interface;
 using Un4seen.Bass;
 
 namespace Pong_SFML.Game.AudioSystem
@@ -11,6 +12,7 @@ namespace Pong_SFML.Game.AudioSystem
         static Timer _timer;
         static int _music;
         static int _channel;
+        static float _volume;
 
         static AudioController()
         {
@@ -20,6 +22,7 @@ namespace Pong_SFML.Game.AudioSystem
 
         public static void LoadMusic(string path)
         {
+            Bass.BASS_ChannelStop(_music);
             _music = Bass.BASS_StreamCreateFile(path, 0L, 0L, BASSFlag.BASS_DEFAULT);
             if (_music != 0)
                 SpectrumCreator.Stream = _music;
@@ -36,16 +39,19 @@ namespace Pong_SFML.Game.AudioSystem
             }
         }
 
-        public static void StartPlayingMusic()
+        public static void StartMusic()
         {
             Bass.BASS_ChannelPlay(_music, false);
-            //Bass.BASS_ChannelSetAttribute(_music, BASSAttribute.BASS_ATTRIB_VOL, 0);
+            Bass.BASS_ChannelSetAttribute(_music, BASSAttribute.BASS_ATTRIB_VOL, 1f);
             InitTimer();
         }
 
+       public static void StopMusic()
+             => _timer.Elapsed += FadeMusic;
+
         public static void Update()
         {
-            if (_timer.Enabled)
+            if (_timer != null)
                 Spectrum.Update(SpectrumCreator.Bytes);
         }
 
@@ -58,6 +64,19 @@ namespace Pong_SFML.Game.AudioSystem
             _timer.Elapsed += SpectrumCreator.Do;
             _timer.AutoReset = true;
             _timer.Enabled = true;
+        }
+
+        private static void FadeMusic(object source, EventArgs e)
+        {
+            Bass.BASS_ChannelGetAttribute(_music, BASSAttribute.BASS_ATTRIB_VOL, ref _volume);
+            Bass.BASS_ChannelSetAttribute(_music, BASSAttribute.BASS_ATTRIB_VOL, _volume - 0.01f);
+
+            if (_volume <= 0.01f)
+            {
+                Bass.BASS_ChannelSetAttribute(_music, BASSAttribute.BASS_ATTRIB_VOL, 0);
+                _timer.Elapsed -= FadeMusic;
+            }
+
         }
     }
 }
