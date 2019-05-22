@@ -2,9 +2,8 @@
 using System.Timers;
 using Pong_SFML.Menu;
 using Pong_SFML.Menu.Components;
-using SFML.Graphics;
 
-namespace Pong_SFML
+namespace Pong_SFML.Components
 {
     public static class MenuController
     {

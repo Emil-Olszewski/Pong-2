@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Pong_SFML.Components;
 using Pong_SFML.Configs;
 using SFML.Graphics;
 using SFML.System;

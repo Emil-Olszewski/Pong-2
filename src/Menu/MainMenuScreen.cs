@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using SFML.Graphics;
-using Pong_SFML.Menu.Components;
-using Pong_SFML.Configs;
 using SFML.System;
-using Pong_SFML.Game.AudioSystem.Types;
+using Pong_SFML.Configs;
+using Pong_SFML.Components;
 using Pong_SFML.Game.AudioSystem;
+using Pong_SFML.Game.AudioSystem.Types;
+using Pong_SFML.Menu.Components;
 
 namespace Pong_SFML.Menu
 {

@@ -6,6 +6,7 @@ using Pong_SFML.Configs;
 using SFML.System;
 using Pong_SFML.Game.AudioSystem.Types;
 using Pong_SFML.Game.AudioSystem;
+using Pong_SFML.Components;
 
 namespace Pong_SFML.Menu
 {

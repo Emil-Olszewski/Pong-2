@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SFML.Graphics;
 using SFML.System;
+using Pong_SFML.Components;
 using Pong_SFML.Game.Systems;
 
 namespace Pong_SFML.Game.Entities.Types
@@ -62,6 +63,12 @@ namespace Pong_SFML.Game.Entities.Types
             }
         }
 
+        public void MoveUp(object sender, EventArgs e)
+            => AddVelocity(GameController.Direction.UP);
+
+        public void MoveDown(object sender, EventArgs e)
+            => AddVelocity(GameController.Direction.DOWN);
+
         public void SetVelocity(Vector2f value)
         {           
             if (value.Y > GameConfig.PLAYER_MAX_SPEED)
@@ -119,6 +126,12 @@ namespace Pong_SFML.Game.Entities.Types
                 EnergyPoints -= Bonus.Price(bonus);
             }
         }
+
+        public void AddBoost(object sender, EventArgs e)
+            => AddBonus(Bonus.Type.BOOST);
+
+        public void AddTransparent(object sender, EventArgs e)
+            => AddBonus(Bonus.Type.TRANSPARENT);
 
         public override void ResetPosition() 
             => Body.Position = new Vector2f(Body.Position.X, GameConfig.PLAYER_Y_SPAWN);

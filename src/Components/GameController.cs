@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using SFML.Graphics;
+using SFML.Window;
 using Pong_SFML.Game;
 using Pong_SFML.Game.Entities;
 using Pong_SFML.Game.Interface;
 using Pong_SFML.Game.AudioSystem;
 using Pong_SFML.Game.AudioSystem.Types;
 using Pong_SFML.Configs;
+using Pong_SFML.Components.Controls;
 
-namespace Pong_SFML
+namespace Pong_SFML.Components
 {
     public static class GameController
     {
@@ -19,6 +21,9 @@ namespace Pong_SFML
         private static Counter _gameCounter;
         private static Counter _backToMenuCounter;
 
+        private static List<FunctionKey> _p1Controls;
+        private static List<FunctionKey> _p2Controls;
+
         public static void Run()
         {
             EntitiesManager.Reset();
@@ -27,6 +32,7 @@ namespace Pong_SFML
             SetAudioController();
             SetTimers();
             _startCounter.Start();
+            SetControls();
         }
 
         private static void SetAudioController()
@@ -48,11 +54,32 @@ namespace Pong_SFML
             _backToMenuCounter.Reset();
         }
 
-        public static void Update()
+        private static void SetControls()
+        {
+            _p1Controls = new List<FunctionKey>()
+            {
+                new FunctionKey(Keyboard.Key.W, Entities.Player1.MoveUp),
+                new FunctionKey(Keyboard.Key.S, Entities.Player1.MoveDown),
+                new FunctionKey(Keyboard.Key.R, Entities.Player1.AddBoost),
+                new FunctionKey(Keyboard.Key.T, Entities.Player1.AddTransparent)
+            };
+
+            _p2Controls = new List<FunctionKey>()
+            {
+                new FunctionKey(Keyboard.Key.Up, Entities.Player2.MoveUp),
+                new FunctionKey(Keyboard.Key.Down, Entities.Player2.MoveDown),
+                new FunctionKey(Keyboard.Key.Numpad1, Entities.Player2.AddBoost),
+                new FunctionKey(Keyboard.Key.Numpad2, Entities.Player2.AddTransparent)
+            };
+        }
+
+    public static void Update()
         {
             MainWindow.Win.Draw(AudioController.Spectrum);
             AudioController.Update();
             RefreshBackground();
+            KeyReactor.Do(_p1Controls);
+            KeyReactor.Do(_p2Controls);
 
             if (_startCounter.Active)
                 MainWindow.Win.Draw(_startCounter);
@@ -105,7 +132,5 @@ namespace Pong_SFML
             Entities.Player2.UpdateScore(Entities.Goals[0].Score);
         }
 
-        public static void ReactTo(DescrKey key)
-            => KeyReactor.Do(key);
     }
 }
