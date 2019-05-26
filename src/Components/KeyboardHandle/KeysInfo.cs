@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using SFML.Window;
 
-namespace Pong_SFML.Components.Controls
+namespace Pong_SFML.Components.KeyboardHandle
 {
     public static class KeysInfo
     {

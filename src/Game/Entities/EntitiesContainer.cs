@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Pong_SFML.Game.Entities.Types;
 using SFML.Graphics;
 using SFML.System;
 using Pong_SFML.Configs;
+using Pong_SFML.Game.Entities.Types;
 
 namespace Pong_SFML.Game.Entities
 {
-    public static class Entities
+    public static class EntitiesContainer
     {
         public static Player Player1; 
         public static Player Player2;
@@ -14,7 +14,7 @@ namespace Pong_SFML.Game.Entities
         public static List<Wall> Walls;
         public static List<Goal> Goals;
 
-        static Entities() => Create();
+        static EntitiesContainer() => Create();
 
         private static void Create()
         {

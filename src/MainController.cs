@@ -1,10 +1,10 @@
 ﻿using System;
 using SFML.Window;
-using Pong_SFML.Configs;
-using System.Text;
+using Pong_SFML.Menu;
+using Pong_SFML.Game;
 using Pong_SFML.Multiplayer;
 using Pong_SFML.Components;
-using Pong_SFML.Components.Controls;
+using Pong_SFML.Components.KeyboardHandle;
 
 namespace Pong_SFML
 {
@@ -19,7 +19,7 @@ namespace Pong_SFML
             while (MainWindow.Win.IsOpen)
             {
                 MainWindow.Win.DispatchEvents();
-                MainWindow.Win.Clear(GameController.BackgroundColor);
+                MainWindow.Clear();
 
                 if (_state == State.MENU)
                     MenuController.Update();

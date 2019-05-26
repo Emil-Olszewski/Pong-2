@@ -14,15 +14,15 @@ namespace Pong_SFML.Game.Entities
             EntitiesList = new List<Entity>();
             MovableEntities = new List<MovableEntity>
             {
-                Entities.Player1,
-                Entities.Player2,
-                Entities.Ball
+                EntitiesContainer.Player1,
+                EntitiesContainer.Player2,
+                EntitiesContainer.Ball
             };
 
-            foreach (Entity wall in Entities.Walls)
+            foreach (Entity wall in EntitiesContainer.Walls)
                 EntitiesList.Add(wall);
 
-            foreach (Entity goal in Entities.Goals)
+            foreach (Entity goal in EntitiesContainer.Goals)
                 EntitiesList.Add(goal);
 
             foreach (Entity en in MovableEntities)

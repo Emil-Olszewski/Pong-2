@@ -40,10 +40,10 @@ namespace Pong_SFML.Game.CollisionSystem
             while (CollisionDetector.IsSticking(rect, ent.GetFloatRect()))
             {
                 float angle = (float)(Math.PI - Math.Atan2(mov.PreviousVelocity.Y, mov.PreviousVelocity.X) * 2);
-                if (mov.GetType() == Entities.Entities.Ball.GetType() && ent.GetType() == Entities.Entities.Player1.GetType())
+                if (mov.GetType() == Entities.EntitiesContainer.Ball.GetType() && ent.GetType() == Entities.EntitiesContainer.Player1.GetType())
                 {
                     angle = GetValidAngleForBallAndPlayer(mov, ent);
-                    Entities.Entities.Ball.WasHitWith(Entities.Entities.GetPlayer(ent.ID));
+                    Entities.EntitiesContainer.Ball.WasHitWith(Entities.EntitiesContainer.GetPlayer(ent.ID));
                     AudioSystem.AudioController.PlaySound("HIT");
                 }
                 mov.Velocity = GetBoundVector(mov, angle, replay > 0 ? true : false);

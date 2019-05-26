@@ -1,20 +1,19 @@
 ﻿using System.Collections.Generic;
-using SFML.Graphics;
 using SFML.Window;
-using Pong_SFML.Game;
+using SFML.Graphics;
 using Pong_SFML.Game.Entities;
 using Pong_SFML.Game.Interface;
 using Pong_SFML.Game.AudioSystem;
 using Pong_SFML.Game.AudioSystem.Types;
-using Pong_SFML.Configs;
-using Pong_SFML.Components.Controls;
+using Pong_SFML.Components;
+using Pong_SFML.Components.KeyboardHandle;
 
-namespace Pong_SFML.Components
+namespace Pong_SFML.Game
 {
     public static class GameController
     {
         public enum Direction { LEFT, RIGHT, UP, DOWN, NONE };
-        public static Color BackgroundColor = Color.Black;
+        public static Color BackgroundColor;
         public static Song Song;
 
         private static Counter _startCounter;
@@ -28,6 +27,7 @@ namespace Pong_SFML.Components
         {
             EntitiesManager.Reset();
             InterfaceManager.Reset();
+            MainWindow.BackgroundColor = BackgroundColor;
             BackgroundColor = GameConfig.BACKGROUND_COLOR;
             SetAudioController();
             SetTimers();
@@ -58,18 +58,18 @@ namespace Pong_SFML.Components
         {
             _p1Controls = new List<FunctionKey>()
             {
-                new FunctionKey(Keyboard.Key.W, Entities.Player1.MoveUp),
-                new FunctionKey(Keyboard.Key.S, Entities.Player1.MoveDown),
-                new FunctionKey(Keyboard.Key.R, Entities.Player1.AddBoost),
-                new FunctionKey(Keyboard.Key.T, Entities.Player1.AddTransparent)
+                new FunctionKey(Keyboard.Key.W, EntitiesContainer.Player1.MoveUp, true),
+                new FunctionKey(Keyboard.Key.S, EntitiesContainer.Player1.MoveDown, true),
+                new FunctionKey(Keyboard.Key.R, EntitiesContainer.Player1.AddBoost),
+                new FunctionKey(Keyboard.Key.T, EntitiesContainer.Player1.AddTransparent)
             };
 
             _p2Controls = new List<FunctionKey>()
             {
-                new FunctionKey(Keyboard.Key.Up, Entities.Player2.MoveUp),
-                new FunctionKey(Keyboard.Key.Down, Entities.Player2.MoveDown),
-                new FunctionKey(Keyboard.Key.Numpad1, Entities.Player2.AddBoost),
-                new FunctionKey(Keyboard.Key.Numpad2, Entities.Player2.AddTransparent)
+                new FunctionKey(Keyboard.Key.Up, EntitiesContainer.Player2.MoveUp, true),
+                new FunctionKey(Keyboard.Key.Down, EntitiesContainer.Player2.MoveDown, true),
+                new FunctionKey(Keyboard.Key.Numpad1, EntitiesContainer.Player2.AddBoost),
+                new FunctionKey(Keyboard.Key.Numpad2, EntitiesContainer.Player2.AddTransparent)
             };
         }
 
@@ -120,17 +120,16 @@ namespace Pong_SFML.Components
         {
             InterfaceManager.SetScores(new List<int>()
             {
-                Entities.Goals[1].Score, Entities.Goals[0].Score
+                EntitiesContainer.Goals[1].Score, EntitiesContainer.Goals[0].Score
             });
 
             InterfaceManager.SetEnergyPoints(new List<int>()
             {
-                 Entities.Player1.EnergyPoints,  Entities.Player2.EnergyPoints
+                 EntitiesContainer.Player1.EnergyPoints,  EntitiesContainer.Player2.EnergyPoints
             });
 
-            Entities.Player1.UpdateScore(Entities.Goals[1].Score);
-            Entities.Player2.UpdateScore(Entities.Goals[0].Score);
+            EntitiesContainer.Player1.UpdateScore(EntitiesContainer.Goals[1].Score);
+            EntitiesContainer.Player2.UpdateScore(EntitiesContainer.Goals[0].Score);
         }
-
     }
 }

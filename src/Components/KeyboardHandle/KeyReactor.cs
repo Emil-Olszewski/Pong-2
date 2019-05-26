@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Pong_SFML.Components.Controls
+namespace Pong_SFML.Components.KeyboardHandle
 {
     static class KeyReactor
     {
@@ -18,8 +14,9 @@ namespace Pong_SFML.Components.Controls
         {
             foreach (FunctionKey key in functionKeys)
             {
-                if (KeysInfo.Holded.Contains(key.Key))
+                if (key.Hold && KeysInfo.Holded.Contains(key.Key))
                     key.Do();
+
                 else if(KeysInfo.Pressed.Contains(key.Key))
                 {
                     KeysInfo.Pressed.Remove(key.Key);
